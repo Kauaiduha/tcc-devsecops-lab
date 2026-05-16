@@ -42,7 +42,12 @@
 
 ### Entrega 3: WAF no Cluster
 
-- Current repo status: no ModSecurity or Coraza configuration files found
+- Controller values: [waf/ingress-nginx-modsecurity-values.yaml](/l/disk0/kauaidb/TCC%20POC/waf/ingress-nginx-modsecurity-values.yaml:1)
+- Lab rules: [waf/modsecurity-config.conf](/l/disk0/kauaidb/TCC%20POC/waf/modsecurity-config.conf:1)
+- Apply guide: [waf/README.md](/l/disk0/kauaidb/TCC%20POC/waf/README.md:1)
+- Validation helper: [scripts/test-waf.sh](/l/disk0/kauaidb/TCC%20POC/scripts/test-waf.sh:1)
+- Architectural decision: [docs/entrega-3-waf-decisao-arquitetural.md](/l/disk0/kauaidb/TCC%20POC/docs/entrega-3-waf-decisao-arquitetural.md:1)
+- Validation record: [docs/entrega-3-waf-validacao.md](/l/disk0/kauaidb/TCC%20POC/docs/entrega-3-waf-validacao.md:1)
 
 ### Entrega 4: Runtime Security
 

@@ -1,0 +1,11 @@
+controller:
+  allowSnippetAnnotations: true
+  config:
+    allow-snippet-annotations: "true"
+    enable-modsecurity: "true"
+    enable-owasp-modsecurity-crs: "true"
+    modsecurity-snippet: |
+      SecRuleEngine On
+      SecAuditEngine RelevantOnly
+      SecAuditLogParts ABIJDEFHZ
+      SecAuditLog /var/log/modsec_audit.log

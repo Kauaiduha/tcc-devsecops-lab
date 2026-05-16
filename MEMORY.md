@@ -51,6 +51,8 @@ There are currently no handlers, services, models, frontend source folders, or t
 - TCC roadmap: [docs/tcc-roadmap.md](/l/disk0/kauaidb/TCC%20POC/docs/tcc-roadmap.md:1)
 - Secrets setup guide: [docs/secrets-setup.md](/l/disk0/kauaidb/TCC%20POC/docs/secrets-setup.md:1)
 - Entrega 2 record: [docs/entrega-2-shift-left.md](/l/disk0/kauaidb/TCC%20POC/docs/entrega-2-shift-left.md:1)
+- WAF assets: [waf/README.md](/l/disk0/kauaidb/TCC%20POC/waf/README.md:1)
+- WAF decision record: [docs/entrega-3-waf-decisao-arquitetural.md](/l/disk0/kauaidb/TCC%20POC/docs/entrega-3-waf-decisao-arquitetural.md:1)
 
 ## Architecture Decisions Observed
 
@@ -60,6 +62,8 @@ There are currently no handlers, services, models, frontend source folders, or t
 - HTTP ingress is routed with class `nginx`
 - The deployment defines CPU and memory requests/limits
 - The deployment defines readiness and liveness probes against `/` on port `3000`
+- Entrega 3 repository assets now target ModSecurity embedded in `ingress-nginx`
+- Entrega 3 uses controller-level ModSecurity policy with application-level enablement in the `Ingress`
 
 ## Current Status
 
@@ -82,6 +86,15 @@ Entrega 2 was also validated technically through GitHub Actions:
 
 This means Entrega 2 is technically complete as a Shift Left demonstration. Remaining work is limited to evidence capture and formal write-up.
 
+Entrega 3 has now been validated technically as well:
+
+- `ingress-nginx` was upgraded with ModSecurity and OWASP CRS enabled
+- the final architecture kept WAF policy in the controller and only WAF enablement in the application `Ingress`
+- encoded SQL injection and XSS payloads returned `403 Forbidden`
+- `ingress-nginx` logs showed ModSecurity blocking activity, including OWASP CRS rule `949110`
+
+This means the WAF layer is functioning as intended for the lab validation flow.
+
 ## Known Gaps
 
 - No `README.md` describing setup, objective, or operating commands
@@ -94,13 +107,15 @@ This means Entrega 2 is technically complete as a Shift Left demonstration. Rema
 - The pipeline currently builds a wrapper image because the Juice Shop source code is not versioned in this repository
 - Local secret file templates now exist, but the real credential files are not expected to be committed
 - Entrega 2 still needs screenshots and extracted logs for formal submission
+- Entrega 3 still needs screenshots and extracted logs for formal submission
 
 ## Pending Work
 
 - Add written runtime justification for Minikube
 - Capture and store evidence for Entrega 1
 - Capture screenshots and log excerpts for Entrega 2
-- Add WAF configuration for Entrega 3
+- Apply and validate the WAF configuration for Entrega 3 in the cluster
+- Capture `403` responses and ModSecurity logs for Entrega 3
 - Add Falco runtime security assets for Entrega 4
 - Consolidate the TCC roadmap into repository documentation
 
