@@ -88,6 +88,9 @@ jobs:
           exit-code: 1
 
       - name: Trivy image scan
+        # Juice Shop is intentionally vulnerable and may include embedded insecure
+        # artifacts such as private keys. A failing scan here is expected and can
+        # be used as Shift Left evidence.
         uses: aquasecurity/trivy-action@v0.36.0
         with:
           image-ref: ${{ needs.build.outputs.image_ref }}
