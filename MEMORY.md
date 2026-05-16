@@ -3,10 +3,10 @@
 ## Project Snapshot
 
 - Repository purpose: local Kubernetes lab for a TCC/DevSecOps project centered on deploying OWASP Juice Shop and evolving the environment across later phases such as CI/CD, WAF, and runtime security.
-- Current scope in this repository: infrastructure manifests, local agent memory/workflows, a TCC roadmap document, and the base assets for Entrega 2 CI/CD are present.
+- Current scope in this repository: infrastructure manifests, local agent memory/workflows, a TCC roadmap document, and technical assets through Entrega 4 are present.
 - Functional role of the target app: OWASP Juice Shop is an intentionally vulnerable example application maintained by OWASP and used here as the attack target and validation surface for Shift Left and Shield Right controls.
 - Documentation status: `README.md` is absent.
-- VCS status: a `.git/` directory exists but is not a valid git repository from this path, so git history could not be used as a reliable source of project status.
+- VCS status: repository is now a valid git repository tracked on `origin/main`.
 
 ## Detected Stack
 
@@ -41,8 +41,7 @@ This repo is infra-centric, not an application monorepo.
 - External HTTP routing: [k8s/juice-shop/ingress.yaml](/l/disk0/kauaidb/TCC%20POC/k8s/juice-shop/ingress.yaml:1)
 - Cluster bootstrap evidence/logging: [minikube_logs.txt](/l/disk0/kauaidb/TCC%20POC/minikube_logs.txt:1)
 
-There are currently no handlers, services, models, frontend source folders, tests, or CI workflow files in the repository.
-There are currently no handlers, services, models, frontend source folders, or tests in the repository. CI workflow files are now present.
+There are currently no handlers, services, models, frontend source folders, or tests in the repository. This is an infra-centric lab repository, and CI workflow files are present.
 
 - CI workflow: [/.github/workflows/devsecops.yml](/l/disk0/kauaidb/TCC%20POC/.github/workflows/devsecops.yml:1)
 - Sonar config: [sonar-project.properties](/l/disk0/kauaidb/TCC%20POC/sonar-project.properties:1)
@@ -98,12 +97,21 @@ Entrega 3 has now been validated technically as well:
 
 This means the WAF layer is functioning as intended for the lab validation flow.
 
+Entrega 4 has now been validated technically as well:
+
+- `falco` and `falcosidekick` were deployed in `devsecops-lab`
+- the initial `CrashLoopBackOff` was resolved by using `falco.rules_files` and disabling `watch_config_files`
+- the validation helper now triggers runtime events and prints the relevant alerts automatically
+- Falco emitted custom alerts for `Exec into Juice Shop`
+- Falco emitted custom alerts for `Read sensitive file in Juice Shop`
+- Falcosidekick logs showed `WebUI - POST OK (200)`, confirming delivery to the UI layer
+
+This means the runtime security layer is functioning as intended for the lab validation flow.
+
 ## Known Gaps
 
 - No `README.md` describing setup, objective, or operating commands
 - No committed evidence files for the TCC deliverables such as browser screenshots
-- No WAF manifests/configuration yet
-- No Falco/Falcosidekick manifests/configuration yet
 - No written justification document for the local runtime choice in this repository
 - The Sonar stage is structurally ready but depends on GitHub secrets and a real SonarQube or SonarCloud project
 - The SonarCloud project key in use is `Kauaiduha_tcc-devsecops-lab`
@@ -117,12 +125,11 @@ This means the WAF layer is functioning as intended for the lab validation flow.
 - Add written runtime justification for Minikube
 - Capture and store evidence for Entrega 1
 - Capture screenshots and log excerpts for Entrega 2
-- Apply and validate the WAF configuration for Entrega 3 in the cluster
 - Capture `403` responses and ModSecurity logs for Entrega 3
-- Install and validate Falco runtime security for Entrega 4
+- Capture Falco logs and Falcosidekick UI screenshots for Entrega 4
 - Consolidate the TCC roadmap into repository documentation
 
 ## Operating Assumptions
 
-- When project status must be inferred, prefer filesystem evidence and live cluster state over git history because git is currently unavailable from this repo path
+- When project status must be inferred, prefer committed repository artifacts plus live cluster evidence
 - When a future session starts, reload this file first, then `tasks/_INDEX.md`, then the latest knowledge notes
