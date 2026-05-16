@@ -17,3 +17,4 @@ secrets/*.yml
 
 # Local artifacts
 docs/evidencias/
+.cache/
