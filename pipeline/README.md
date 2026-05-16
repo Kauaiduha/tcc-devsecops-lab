@@ -14,7 +14,7 @@ The repository does not currently contain custom application source code, so the
 
 - `SONAR_TOKEN`
 
-## Required GitHub Variables or Secrets
+## Required GitHub Variables
 
 - `SONAR_HOST_URL`
 

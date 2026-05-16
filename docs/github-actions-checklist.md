@@ -25,7 +25,9 @@ Add these in `Settings -> Secrets and variables -> Actions -> Variables`:
 
 ## Important note
 
-`SONAR_HOST_URL` is still empty in the local `secrets/devsecops.env` until you set it yourself. The correct value for SonarQube Cloud is:
+The workflow reads `SONAR_HOST_URL` from GitHub Actions Variables, not from Secrets.
+
+The correct value for SonarQube Cloud is:
 
 ```dotenv
 SONAR_HOST_URL=https://sonarcloud.io
