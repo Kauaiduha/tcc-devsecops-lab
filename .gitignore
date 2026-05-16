@@ -1,0 +1,19 @@
+# Local secrets
+secrets/*.env
+secrets/*.local
+secrets/*.secret
+secrets/*.token
+secrets/*.key
+secrets/*.pem
+secrets/*.crt
+secrets/*.json
+secrets/*.yaml
+secrets/*.yml
+!secrets/*.example
+!secrets/.gitkeep
+
+# Optional kubeconfig copies
+.kube/
+
+# Local artifacts
+docs/evidencias/

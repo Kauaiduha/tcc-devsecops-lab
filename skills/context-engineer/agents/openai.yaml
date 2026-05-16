@@ -1,0 +1,7 @@
+interface:
+  display_name: "Context Engineer"
+  short_description: "Initialize and maintain repo memory"
+  default_prompt: "Use $context-engineer to inspect this repository, create or refresh the persistent memory files, and sync the current project context."
+
+policy:
+  allow_implicit_invocation: true
