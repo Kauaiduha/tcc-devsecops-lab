@@ -53,6 +53,8 @@ There are currently no handlers, services, models, frontend source folders, or t
 - Entrega 2 record: [docs/entrega-2-shift-left.md](/l/disk0/kauaidb/TCC%20POC/docs/entrega-2-shift-left.md:1)
 - WAF assets: [waf/README.md](/l/disk0/kauaidb/TCC%20POC/waf/README.md:1)
 - WAF decision record: [docs/entrega-3-waf-decisao-arquitetural.md](/l/disk0/kauaidb/TCC%20POC/docs/entrega-3-waf-decisao-arquitetural.md:1)
+- WAF evidence guide: [docs/entrega-3-evidencias.md](/l/disk0/kauaidb/TCC%20POC/docs/entrega-3-evidencias.md:1)
+- Falco assets: [falco/README.md](/l/disk0/kauaidb/TCC%20POC/falco/README.md:1)
 
 ## Architecture Decisions Observed
 
@@ -64,6 +66,7 @@ There are currently no handlers, services, models, frontend source folders, or t
 - The deployment defines readiness and liveness probes against `/` on port `3000`
 - Entrega 3 repository assets now target ModSecurity embedded in `ingress-nginx`
 - Entrega 3 uses controller-level ModSecurity policy with application-level enablement in the `Ingress`
+- Entrega 4 repository assets now target Falco plus Falcosidekick for runtime detection
 
 ## Current Status
 
@@ -116,7 +119,7 @@ This means the WAF layer is functioning as intended for the lab validation flow.
 - Capture screenshots and log excerpts for Entrega 2
 - Apply and validate the WAF configuration for Entrega 3 in the cluster
 - Capture `403` responses and ModSecurity logs for Entrega 3
-- Add Falco runtime security assets for Entrega 4
+- Install and validate Falco runtime security for Entrega 4
 - Consolidate the TCC roadmap into repository documentation
 
 ## Operating Assumptions

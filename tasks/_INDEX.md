@@ -48,10 +48,15 @@
 - Validation helper: [scripts/test-waf.sh](/l/disk0/kauaidb/TCC%20POC/scripts/test-waf.sh:1)
 - Architectural decision: [docs/entrega-3-waf-decisao-arquitetural.md](/l/disk0/kauaidb/TCC%20POC/docs/entrega-3-waf-decisao-arquitetural.md:1)
 - Validation record: [docs/entrega-3-waf-validacao.md](/l/disk0/kauaidb/TCC%20POC/docs/entrega-3-waf-validacao.md:1)
+- Evidence guide: [docs/entrega-3-evidencias.md](/l/disk0/kauaidb/TCC%20POC/docs/entrega-3-evidencias.md:1)
 
 ### Entrega 4: Runtime Security
 
-- Current repo status: no Falco or Falcosidekick configuration files found
+- Custom rules: [falco/custom-rules.yaml](/l/disk0/kauaidb/TCC%20POC/falco/custom-rules.yaml:1)
+- Helm values: [falco/falco-values.yaml](/l/disk0/kauaidb/TCC%20POC/falco/falco-values.yaml:1)
+- Apply guide: [falco/README.md](/l/disk0/kauaidb/TCC%20POC/falco/README.md:1)
+- Validation helper: [scripts/test-falco.sh](/l/disk0/kauaidb/TCC%20POC/scripts/test-falco.sh:1)
+- Delivery record: [docs/entrega-4-runtime-security.md](/l/disk0/kauaidb/TCC%20POC/docs/entrega-4-runtime-security.md:1)
 
 ## Context Files
 

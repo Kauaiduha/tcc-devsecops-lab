@@ -1,0 +1,22 @@
+- rule: Exec into Juice Shop
+  desc: Detect process execution inside the Juice Shop pod
+  condition: >
+    spawned_process and container and
+    k8s.ns.name = "devsecops-lab" and
+    k8s.pod.name startswith "juice-shop"
+  output: >
+    Exec detectado no Juice Shop
+    (user=%user.name command=%proc.cmdline proc=%proc.name parent=%proc.pname pod=%k8s.pod.name container=%container.name)
+  priority: WARNING
+
+- rule: Read sensitive file in Juice Shop
+  desc: Detect sensitive file reads inside the Juice Shop pod
+  condition: >
+    open_read and container and
+    k8s.ns.name = "devsecops-lab" and
+    k8s.pod.name startswith "juice-shop" and
+    fd.name in (/etc/passwd, /juice-shop/build/data/juiceshop.sqlite, /juice-shop/data/juiceshop.sqlite)
+  output: >
+    Leitura de arquivo sensivel no Juice Shop
+    (user=%user.name file=%fd.name command=%proc.cmdline pod=%k8s.pod.name container=%container.name)
+  priority: WARNING
