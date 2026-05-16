@@ -50,6 +50,7 @@ There are currently no handlers, services, models, frontend source folders, or t
 - Local scan helper: [scripts/run-trivy-local.sh](/l/disk0/kauaidb/TCC%20POC/scripts/run-trivy-local.sh:1)
 - TCC roadmap: [docs/tcc-roadmap.md](/l/disk0/kauaidb/TCC%20POC/docs/tcc-roadmap.md:1)
 - Secrets setup guide: [docs/secrets-setup.md](/l/disk0/kauaidb/TCC%20POC/docs/secrets-setup.md:1)
+- Entrega 2 record: [docs/entrega-2-shift-left.md](/l/disk0/kauaidb/TCC%20POC/docs/entrega-2-shift-left.md:1)
 
 ## Architecture Decisions Observed
 
@@ -73,6 +74,14 @@ Based on live cluster validation performed on 2026-05-16:
 
 This means the technical implementation for the first delivery milestone appears operational at the time of the last validation.
 
+Entrega 2 was also validated technically through GitHub Actions:
+
+- `build` passed after normalizing the GHCR image name to lowercase
+- `sast` passed after switching SonarCloud analysis to CI mode
+- `sca` executed and correctly blocked the pipeline on Trivy findings from the intentionally vulnerable OWASP Juice Shop image
+
+This means Entrega 2 is technically complete as a Shift Left demonstration. Remaining work is limited to evidence capture and formal write-up.
+
 ## Known Gaps
 
 - No `README.md` describing setup, objective, or operating commands
@@ -84,14 +93,13 @@ This means the technical implementation for the first delivery milestone appears
 - The SonarCloud project key in use is `Kauaiduha_tcc-devsecops-lab`
 - The pipeline currently builds a wrapper image because the Juice Shop source code is not versioned in this repository
 - Local secret file templates now exist, but the real credential files are not expected to be committed
+- Entrega 2 still needs screenshots and extracted logs for formal submission
 
 ## Pending Work
 
 - Add written runtime justification for Minikube
 - Capture and store evidence for Entrega 1
-- Configure `SONAR_TOKEN` and `SONAR_HOST_URL` in GitHub for Entrega 2
-- Run and validate the CI/CD pipeline in GitHub Actions
-- Add a deliberate vulnerable dependency or controlled failing condition to demonstrate a blocked pipeline
+- Capture screenshots and log excerpts for Entrega 2
 - Add WAF configuration for Entrega 3
 - Add Falco runtime security assets for Entrega 4
 - Consolidate the TCC roadmap into repository documentation

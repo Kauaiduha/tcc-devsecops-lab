@@ -38,6 +38,7 @@
 - Build asset: [Dockerfile](/l/disk0/kauaidb/TCC%20POC/Dockerfile:1)
 - Local validation helper: [scripts/run-trivy-local.sh](/l/disk0/kauaidb/TCC%20POC/scripts/run-trivy-local.sh:1)
 - Pipeline notes: [pipeline/README.md](/l/disk0/kauaidb/TCC%20POC/pipeline/README.md:1)
+- Delivery record: [docs/entrega-2-shift-left.md](/l/disk0/kauaidb/TCC%20POC/docs/entrega-2-shift-left.md:1)
 
 ### Entrega 3: WAF no Cluster
 
