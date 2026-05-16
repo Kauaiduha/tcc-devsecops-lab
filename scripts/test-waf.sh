@@ -6,9 +6,9 @@ HOST_HEADER="${2:-juice-shop.local}"
 
 echo "Testing SQL injection payload against ${BASE_URL}"
 curl -i -H "Host: ${HOST_HEADER}" \
-  "${BASE_URL}/rest/products/search?q=test' OR 1=1--"
+  "${BASE_URL}/rest/products/search?q=test%27%20OR%201%3D1--"
 
 echo
 echo "Testing XSS payload against ${BASE_URL}"
 curl -i -H "Host: ${HOST_HEADER}" \
-  "${BASE_URL}/search?q=<script>alert(1)</script>"
+  "${BASE_URL}/search?q=%3Cscript%3Ealert(1)%3C%2Fscript%3E"
