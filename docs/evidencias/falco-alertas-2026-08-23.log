@@ -1,0 +1,5 @@
+2026-08-23T22:03:59.720862796Z Warning rule="Exec into Juice Shop" pod="juice-shop-86d6899c64-krcrk" namespace="devsecops-lab" command="node -e console.log('falco-exec-C5-01')"
+2026-08-23T22:04:00.106402161Z Warning rule="Read sensitive file in Juice Shop" pod="juice-shop-86d6899c64-krcrk" namespace="devsecops-lab" file="/etc/passwd" command="node -e require('fs').readFileSync('/etc/passwd','utf8'); console.log('falco-read-C6-01')"
+2026-08-23T22:04:05.554827917Z Warning rule="Exec into Juice Shop" pod="juice-shop-86d6899c64-krcrk" namespace="devsecops-lab" command="node -e console.log('falco-exec-C5-10')"
+2026-08-23T22:04:05.911225085Z Warning rule="Read sensitive file in Juice Shop" pod="juice-shop-86d6899c64-krcrk" namespace="devsecops-lab" file="/etc/passwd" command="node -e require('fs').readFileSync('/etc/passwd','utf8'); console.log('falco-read-C6-10')"
+2026-08-23T22:03:59.341893067Z Notice rule="Run shell untrusted" pod="<NA>" namespace="<NA>" classification="host noise from the laboratory orchestration process"

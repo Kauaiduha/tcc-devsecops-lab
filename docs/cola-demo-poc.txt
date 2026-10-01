@@ -1,0 +1,126 @@
+COLA RAPIDA - DEMONSTRACAO DA POC
+
+Diretorio base:
+
+cd "/l/disk0/kauaidb/TCC POC"
+
+
+========================================
+1. MOSTRAR QUE O AMBIENTE ESTA DE PE
+========================================
+
+Comando:
+
+kubectl get pods -n devsecops-lab
+
+Opcional:
+
+kubectl get svc -n devsecops-lab
+
+
+========================================
+2. SHIFT LEFT - PIPELINE
+========================================
+
+Melhor mostrar no navegador:
+
+- GitHub Actions do repositorio
+- build aprovado
+- sast aprovado
+- sca falhando
+
+./scripts/run-trivy-local.sh
+
+
+========================================
+3. SHIELD RIGHT - WAF
+========================================
+
+Comando principal:
+
+./scripts/test-waf.sh "http://192.168.49.2:31191" "juice-shop.local"
+
+Resultado esperado:
+
+- SQL Injection com HTTP/1.1 403 Forbidden
+- XSS com HTTP/1.1 403 Forbidden
+
+Log do WAF:
+
+kubectl logs deployment/ingress-nginx-controller -n devsecops-lab --tail=200 | grep -E "ModSecurity|403|juice-shop.local|/search|/rest/products/search"
+
+O que observar no log:
+
+- Access denied with code 403
+- regra OWASP CRS
+- host juice-shop.local
+- uri /search ou /rest/products/search
+
+
+
+========================================
+4. SHIELD RIGHT - RUNTIME SECURITY
+========================================
+
+Comando principal:
+
+./scripts/test-falco.sh devsecops-lab "" /nodejs/bin/node 5 1m
+
+Resultado esperado no proprio script:
+
+- Exec detectado no Juice Shop
+- Leitura de arquivo sensivel no Juice Shop
+
+Se quiser reforcar com log manual do Falco:
+
+kubectl logs daemonset/falco -n devsecops-lab --since=2m | grep -E "Exec detectado|Leitura de arquivo sensivel|juice-shop|/etc/passwd"
+
+Se quiser mostrar log do Falcosidekick:
+
+kubectl logs deployment/falco-falcosidekick -n devsecops-lab --since=10m
+
+O que observar:
+
+- regra Exec into Juice Shop
+- regra Read sensitive file in Juice Shop
+- pod juice-shop
+- arquivo /etc/passwd
+- WebUI - POST OK (200) no Falcosidekick
+
+
+========================================
+5. FALCOSIDEKICK UI
+========================================
+
+Port-forward:
+
+kubectl port-forward -n devsecops-lab svc/falco-falcosidekick-ui 2802:2802
+
+Abrir no navegador:
+
+http://127.0.0.1:2802
+
+Login:
+
+- usuario: admin
+- senha: admin
+
+O que mostrar:
+
+- eventos do tipo Warning
+- evento Exec into Juice Shop
+- evento Read sensitive file in Juice Shop
+
+
+========================================
+7. COMANDOS EM SEQUENCIA
+========================================
+
+cd "/l/disk0/kauaidb/TCC POC"
+kubectl get pods -n devsecops-lab
+./scripts/test-waf.sh "http://192.168.49.2:31191" "juice-shop.local"
+kubectl logs deployment/ingress-nginx-controller -n devsecops-lab --tail=200 | grep -E "ModSecurity|403|juice-shop.local|/search|/rest/products/search"
+./scripts/test-falco.sh devsecops-lab "" /nodejs/bin/node 5 1m
+kubectl logs daemonset/falco -n devsecops-lab --since=2m | grep -E "Exec detectado|Leitura de arquivo sensivel|juice-shop|/etc/passwd"
+kubectl logs deployment/falco-falcosidekick -n devsecops-lab --since=10m
+kubectl port-forward -n devsecops-lab svc/falco-falcosidekick-ui 2802:2802

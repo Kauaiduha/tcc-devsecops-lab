@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Entrega 5 - Shift Left e Shield Right</title>
+  <style>
+    :root {
+      --bg: #ebe6d7;
+      --paper: #fffdf8;
+      --ink: #18231d;
+      --muted: #667067;
+      --line: #d4ccbc;
+      --accent: #0e6b53;
+      --accent-2: #c15b2f;
+      --accent-3: #1e4f96;
+      --accent-soft: #e9f5f0;
+      --accent-2-soft: #fbede6;
+      --accent-3-soft: #ebf1fb;
+      --warn: #d28a00;
+      --shadow: rgba(26, 31, 27, 0.08);
+      --shadow-strong: rgba(26, 31, 27, 0.14);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "DejaVu Sans", "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(30, 79, 150, 0.08), transparent 28%),
+        radial-gradient(circle at top right, rgba(14, 107, 83, 0.08), transparent 30%),
+        linear-gradient(180deg, #ece7d9 0%, #f8f6ef 100%);
+      color: var(--ink);
+    }
+
+    .page {
+      width: 210mm;
+      min-height: 297mm;
+      margin: 0 auto;
+      padding: 16mm 14mm 18mm;
+      background: var(--paper);
+      box-shadow: 0 14px 48px var(--shadow-strong);
+    }
+
+    .hero {
+      border: 1px solid rgba(212, 204, 188, 0.9);
+      border-radius: 24px;
+      padding: 22px 24px;
+      background:
+        radial-gradient(circle at top right, rgba(14, 107, 83, 0.14), transparent 30%),
+        radial-gradient(circle at bottom left, rgba(30, 79, 150, 0.08), transparent 25%),
+        linear-gradient(135deg, #fffdf8 0%, #f3eddf 100%);
+    }
+
+    .kicker {
+      margin: 0 0 8px;
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 31px;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+    }
+
+    .subtitle {
+      margin: 12px 0 0;
+      font-size: 14px;
+      color: var(--muted);
+      max-width: 152mm;
+      line-height: 1.6;
+    }
+
+    h2 {
+      margin: 28px 0 12px;
+      font-size: 24px;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+    }
+
+    h3 {
+      margin: 16px 0 8px;
+      font-size: 17px;
+      line-height: 1.2;
+    }
+
+    p {
+      margin: 8px 0;
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .small {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .card {
+      border: 1px solid rgba(212, 204, 188, 0.88);
+      border-radius: 18px;
+      padding: 16px;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(250, 247, 239, 0.96));
+      box-shadow: 0 10px 24px rgba(26, 31, 27, 0.04);
+    }
+
+    .pill {
+      display: inline-block;
+      padding: 5px 11px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+
+    .pill-left {
+      background: var(--accent-3-soft);
+      color: var(--accent-3);
+    }
+
+    .pill-right {
+      background: var(--accent-2-soft);
+      color: var(--accent-2);
+    }
+
+    .pill-runtime {
+      background: var(--accent-soft);
+      color: var(--accent);
+    }
+
+    ul {
+      margin: 8px 0 0 18px;
+      padding: 0;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    li + li {
+      margin-top: 4px;
+    }
+
+    .diagram-wrap {
+      margin-top: 14px;
+      border: 1px solid rgba(212, 204, 188, 0.9);
+      border-radius: 24px;
+      padding: 18px;
+      background:
+        radial-gradient(circle at top left, rgba(30, 79, 150, 0.04), transparent 26%),
+        radial-gradient(circle at bottom right, rgba(14, 107, 83, 0.05), transparent 28%),
+        linear-gradient(180deg, #fffdf8 0%, #f7f4eb 100%);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    }
+
+    svg {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .section-note {
+      margin-top: 12px;
+      padding: 10px 0 10px 14px;
+      border-left: 4px solid var(--accent);
+      color: var(--muted);
+      background: linear-gradient(90deg, rgba(14, 107, 83, 0.06), transparent 75%);
+      border-radius: 0 12px 12px 0;
+    }
+
+    .scenario {
+      margin-top: 18px;
+      border: 1px solid rgba(212, 204, 188, 0.88);
+      border-radius: 20px;
+      padding: 18px;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(250, 247, 239, 0.96));
+      box-shadow: 0 10px 24px rgba(26, 31, 27, 0.04);
+    }
+
+    .scenario-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: baseline;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 8px;
+      margin-bottom: 12px;
+    }
+
+    .scenario-head h3 {
+      margin: 0;
+    }
+
+    .command {
+      margin-top: 10px;
+      background: linear-gradient(180deg, #202724 0%, #171d1b 100%);
+      color: #f7f7f2;
+      border-radius: 16px;
+      padding: 14px 16px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+      font-family: "DejaVu Sans Mono", "Consolas", monospace;
+      font-size: 12px;
+      line-height: 1.45;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .print-box {
+      margin-top: 12px;
+      border: 2px dashed #c2b9a8;
+      border-radius: 18px;
+      min-height: 82mm;
+      padding: 14px;
+      background:
+        linear-gradient(180deg, rgba(184, 176, 159, 0.05), rgba(184, 176, 159, 0.015));
+    }
+
+    .print-box.tall {
+      min-height: 105mm;
+    }
+
+    .print-box.filled {
+      border-style: solid;
+      border-color: rgba(212, 204, 188, 0.95);
+      background: linear-gradient(180deg, #fffefb, #faf7ef);
+    }
+
+    .print-box.clean {
+      min-height: auto;
+      padding-bottom: 16px;
+    }
+
+    .evidence-image {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 12px;
+      border: 1px solid rgba(212, 204, 188, 0.9);
+      box-shadow: 0 8px 18px rgba(26, 31, 27, 0.06);
+      margin-top: 10px;
+    }
+
+    .print-title {
+      margin: 0 0 8px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--muted);
+    }
+
+    .caption {
+      margin-top: 8px;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .footer {
+      margin-top: 20px;
+      border-top: 1px solid var(--line);
+      padding-top: 10px;
+      font-size: 11px;
+      color: var(--muted);
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .page-break {
+      page-break-before: always;
+      break-before: page;
+    }
+
+    @media print {
+      body {
+        background: #fff;
+      }
+
+      .page {
+        width: auto;
+        min-height: auto;
+        margin: 0;
+        padding: 10mm 10mm 12mm;
+        box-shadow: none;
+      }
+
+      .command {
+        color: #111;
+        background: #f1f1f1;
+        border: 1px solid #d0d0d0;
+        box-shadow: none;
+      }
+
+      .print-box {
+        background: #fff;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <section class="hero">
+      <p class="kicker">Entrega 5 · Diagrama e evidencias</p>
+      <h1>PoC DevSecOps: Shift Left e Shield Right em Kubernetes</h1>
+      <p class="subtitle">
+        Documento visual para exportar em PDF e usar na entrega da Entrega 5.
+        O foco e mostrar a complementaridade entre pipeline, WAF e runtime security
+        usando o OWASP Juice Shop como alvo.
+      </p>
+    </section>
+
+    <h2>1. Arquitetura geral da PoC</h2>
+    <p>
+      A PoC foi organizada em tres camadas de defesa. O <strong>Shift Left</strong>
+      atua antes do deploy, no pipeline CI/CD. O <strong>Shield Right</strong>
+      atua em duas frentes: na borda HTTP com WAF e em runtime com Falco.
+    </p>
+
+    <div class="diagram-wrap">
+      <svg viewBox="0 0 1080 700" aria-label="Diagrama da arquitetura da PoC">
+        <defs>
+          <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+            <path d="M0,0 L0,6 L9,3 z" fill="#44504a"></path>
+          </marker>
+          <marker id="arrowGreen" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+            <path d="M0,0 L0,6 L9,3 z" fill="#0b6e4f"></path>
+          </marker>
+          <marker id="arrowOrange" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+            <path d="M0,0 L0,6 L9,3 z" fill="#b8572f"></path>
+          </marker>
+          <style>
+            .box { fill: #fffefb; stroke: #aa9f8c; stroke-width: 2; rx: 18; ry: 18; }
+            .accent-left { fill: #ebf1fb; stroke: #6b8ebf; stroke-width: 2; rx: 18; ry: 18; }
+            .accent-right { fill: #fcede5; stroke: #d28967; stroke-width: 2; rx: 18; ry: 18; }
+            .accent-runtime { fill: #e8f5ef; stroke: #68a589; stroke-width: 2; rx: 18; ry: 18; }
+            .cluster { fill: #faf6ee; stroke: #7d786f; stroke-width: 2.5; rx: 24; ry: 24; }
+            .title { font: 700 22px 'DejaVu Sans', sans-serif; fill: #1f2a20; }
+            .label { font: 700 15px 'DejaVu Sans', sans-serif; fill: #1f2a20; }
+            .small { font: 12px 'DejaVu Sans', sans-serif; fill: #5d635a; }
+            .tiny { font: 11px 'DejaVu Sans', sans-serif; fill: #5d635a; }
+            .left { fill: #214e8a; font: 700 15px 'DejaVu Sans', sans-serif; }
+            .right { fill: #b8572f; font: 700 15px 'DejaVu Sans', sans-serif; }
+            .runtime { fill: #0b6e4f; font: 700 15px 'DejaVu Sans', sans-serif; }
+          </style>
+        </defs>
+
+        <text x="24" y="36" class="left">SHIFT LEFT</text>
+        <text x="620" y="36" class="right">SHIELD RIGHT</text>
+
+        <rect x="20" y="60" width="450" height="250" class="cluster"></rect>
+        <text x="40" y="92" class="title">Pipeline CI/CD</text>
+        <text x="40" y="116" class="small">Impedir o avanço do artefato inseguro antes do deploy</text>
+
+        <rect x="40" y="140" width="110" height="72" class="box"></rect>
+        <text x="77" y="181" class="label">GitHub</text>
+
+        <rect x="186" y="140" width="130" height="72" class="box"></rect>
+        <text x="212" y="171" class="label">Actions</text>
+        <text x="212" y="192" class="small">build + gates</text>
+
+        <rect x="340" y="122" width="110" height="52" class="box"></rect>
+        <text x="358" y="154" class="label">SonarQube</text>
+
+        <rect x="340" y="186" width="110" height="52" class="box"></rect>
+        <text x="375" y="218" class="label">Trivy</text>
+
+        <line x1="150" y1="176" x2="186" y2="176" stroke="#44504a" stroke-width="3" marker-end="url(#arrow)"></line>
+        <line x1="316" y1="164" x2="340" y2="148" stroke="#44504a" stroke-width="3" marker-end="url(#arrow)"></line>
+        <line x1="316" y1="188" x2="340" y2="212" stroke="#44504a" stroke-width="3" marker-end="url(#arrow)"></line>
+
+        <rect x="198" y="234" width="110" height="52" class="box"></rect>
+        <text x="228" y="266" class="label">GHCR</text>
+        <line x1="251" y1="212" x2="251" y2="234" stroke="#44504a" stroke-width="3" marker-end="url(#arrow)"></line>
+
+        <rect x="520" y="60" width="535" height="550" class="cluster"></rect>
+        <text x="542" y="92" class="title">Cluster Minikube</text>
+        <text x="544" y="118" class="small">namespace: devsecops-lab</text>
+        <text x="544" y="138" class="small">Aplicação protegida por WAF na borda e Falco em runtime</text>
+
+        <rect x="560" y="168" width="190" height="92" class="box"></rect>
+        <text x="598" y="200" class="label">NGINX Ingress</text>
+        <text x="593" y="222" class="small">ModSecurity + CRS</text>
+
+        <rect x="818" y="168" width="190" height="92" class="box"></rect>
+        <text x="864" y="200" class="label">Juice Shop</text>
+        <text x="855" y="222" class="small">OWASP app alvo</text>
+
+        <line x1="750" y1="214" x2="818" y2="214" stroke="#b8572f" stroke-width="4" marker-end="url(#arrowOrange)"></line>
+
+        <rect x="560" y="336" width="190" height="86" class="box"></rect>
+        <text x="623" y="368" class="label">Falco</text>
+        <text x="585" y="390" class="small">detecção em runtime</text>
+
+        <rect x="818" y="336" width="190" height="86" class="box"></rect>
+        <text x="839" y="368" class="label">Falcosidekick</text>
+        <text x="849" y="390" class="small">encaminha alertas</text>
+
+        <rect x="818" y="462" width="190" height="86" class="box"></rect>
+        <text x="849" y="494" class="label">Falcosidekick UI</text>
+        <text x="862" y="516" class="small">visualização web</text>
+
+        <line x1="913" y1="260" x2="656" y2="336" stroke="#0b6e4f" stroke-width="4" marker-end="url(#arrowGreen)"></line>
+        <line x1="750" y1="379" x2="818" y2="379" stroke="#0b6e4f" stroke-width="4" marker-end="url(#arrowGreen)"></line>
+        <line x1="913" y1="422" x2="913" y2="462" stroke="#0b6e4f" stroke-width="4" marker-end="url(#arrowGreen)"></line>
+
+        <rect x="40" y="344" width="200" height="88" class="accent-left"></rect>
+        <text x="75" y="378" class="label">Bloqueio no pipeline</text>
+        <text x="58" y="401" class="tiny">build -> Sonar -> Trivy</text>
+        <text x="78" y="419" class="tiny">quebra no gate</text>
+
+        <rect x="260" y="344" width="200" height="88" class="accent-right"></rect>
+        <text x="304" y="378" class="label">Bloqueio na borda</text>
+        <text x="287" y="401" class="tiny">SQLi e XSS retornam</text>
+        <text x="339" y="419" class="tiny">HTTP 403</text>
+
+        <rect x="40" y="454" width="420" height="110" class="accent-runtime"></rect>
+        <text x="66" y="488" class="label">Detecção em runtime</text>
+        <text x="66" y="512" class="small">Falco alerta para execução de processo no Juice Shop</text>
+        <text x="66" y="532" class="small">e leitura de arquivo sensível em /etc/passwd.</text>
+      </svg>
+    </div>
+
+    <p class="section-note">
+      Leitura do diagrama: a mesma aplicacao e protegida em momentos diferentes do ciclo de vida.
+      O pipeline tenta impedir o avancar do artefato, o WAF bloqueia trafego malicioso e o Falco
+      detecta comportamento suspeito durante a execucao.
+    </p>
+
+    <h2>2. Comparacao entre Shift Left e Shield Right</h2>
+    <div class="grid-3">
+      <div class="card">
+        <span class="pill pill-left">Shift Left</span>
+        <h3>Antes do deploy</h3>
+        <ul>
+          <li>Build da imagem</li>
+          <li>SAST com SonarQube Cloud</li>
+          <li>SCA e image scan com Trivy</li>
+          <li>Quebra da pipeline quando o gate falha</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="pill pill-right">Shield Right</span>
+        <h3>Na borda HTTP</h3>
+        <ul>
+          <li>NGINX Ingress</li>
+          <li>ModSecurity habilitado</li>
+          <li>OWASP CRS ativo</li>
+          <li>Bloqueio de SQLi e XSS com 403</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="pill pill-runtime">Shield Right</span>
+        <h3>Em runtime</h3>
+        <ul>
+          <li>Falco observando syscalls</li>
+          <li>Falcosidekick encaminhando alertas</li>
+          <li>Deteccao de exec no container</li>
+          <li>Deteccao de leitura de arquivo sensivel</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer">
+      <span>Arquivo pronto para exportacao em PDF via navegador</span>
+      <span>Dica: Ctrl+P -> Salvar como PDF</span>
+    </div>
+  </div>
+
+  <div class="page page-break">
+    <h2>3. Evidencias da Entrega 5</h2>
+    <p>
+      Esta pagina foi preparada para voce preencher com prints reais do laboratorio e
+      transformar em PDF final da PoC comparativa.
+    </p>
+
+    <section class="scenario">
+      <div class="scenario-head">
+        <h3>Cenario 1 - Shift Left atuando</h3>
+        <span class="pill pill-left">Pipeline</span>
+      </div>
+      <p>
+        Objetivo: demonstrar que um artefato inseguro e bloqueado antes de qualquer
+        push ou deploy. No laboratorio atual, a evidência principal e o job
+        <strong>sca</strong> falhando no Trivy por achados do Juice Shop.
+      </p>
+      <div class="command">Abrir no navegador:
+GitHub -> repositorio -> Actions -> workflow "DevSecOps Pipeline"
+
+O que capturar:
+- build aprovado
+- sast aprovado
+- sca falhando
+- trecho do log do Trivy com o achado e exit code 1</div>
+      <div class="print-box filled clean">
+        <p class="print-title">GitHub Actions com falha no job de SCA</p>
+        <img class="evidence-image" src="Imagem colada.png" alt="GitHub Actions com falha no job de SCA por achados do Trivy">
+      </div>
+    </section>
+
+    <section class="scenario">
+      <div class="scenario-head">
+        <h3>Cenario 2 - Shield Right atuando na borda</h3>
+        <span class="pill pill-right">WAF</span>
+      </div>
+      <p>
+        Objetivo: demonstrar que o WAF intercepta requisições HTTP maliciosas antes de
+        atingir o Juice Shop.
+      </p>
+      <div class="command">Comando rapido:
+cd "/l/disk0/kauaidb/TCC POC"
+./scripts/test-waf.sh "http://192.168.49.2:31191" "juice-shop.local"
+
+Ou, se quiser individualmente:
+curl -i -H "Host: juice-shop.local" "http://192.168.49.2:31191/rest/products/search?q=test%27%20OR%201%3D1--"
+curl -i -H "Host: juice-shop.local" "http://192.168.49.2:31191/search?q=%3Cscript%3Ealert(1)%3C%2Fscript%3E"
+
+Log de apoio:
+kubectl logs deployment/ingress-nginx-controller -n devsecops-lab --tail=200 | grep -E "ModSecurity|403|juice-shop.local|/search|/rest/products/search"</div>
+      <div class="grid-2">
+        <div class="print-box filled clean">
+          <p class="print-title">Terminal com SQLi e XSS retornando 403</p>
+          <img class="evidence-image" src="image-1.png" alt="Teste do WAF com SQLi e XSS retornando HTTP 403">
+        </div>
+        <div class="print-box filled clean">
+          <p class="print-title">Logs do ingress-nginx com ModSecurity</p>
+          <img class="evidence-image" src="image-3.png" alt="Logs do ModSecurity registrando o bloqueio de SQLi e XSS">
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="page page-break">
+    <section class="scenario">
+      <div class="scenario-head">
+        <h3>Cenario 3 - Shield Right atuando em runtime</h3>
+        <span class="pill pill-runtime">Falco</span>
+      </div>
+      <p>
+        Objetivo: demonstrar que o Falco detecta comportamento anomalo dentro do pod
+        do Juice Shop mesmo depois do deploy.
+      </p>
+      <div class="command">Comando principal:
+cd "/l/disk0/kauaidb/TCC POC"
+./scripts/test-falco.sh devsecops-lab "" /nodejs/bin/node 5 1m
+
+Log manual complementar:
+kubectl logs daemonset/falco -n devsecops-lab --since=2m | grep -E "Exec detectado|Leitura de arquivo sensivel|juice-shop|/etc/passwd"
+
+Validacao visual:
+kubectl port-forward -n devsecops-lab svc/falco-falcosidekick-ui 2802:2802
+
+Abrir no navegador:
+http://127.0.0.1:2802
+login: admin
+senha: admin</div>
+      <div class="grid-2">
+        <div class="print-box tall filled clean">
+          <p class="print-title">Falcosidekick UI com os eventos</p>
+          <img class="evidence-image" src="image-4.png" alt="Falcosidekick UI exibindo os eventos de runtime detectados">
+        </div>
+        <div class="print-box tall filled clean">
+          <p class="print-title">Terminal com os alertas do Falco</p>
+          <img class="evidence-image" src="image-5.png" alt="Terminal com o helper do Falco e os alertas detectados para o Juice Shop">
+        </div>
+      </div>
+    </section>
+
+    <h2>4. Tabela comparativa para o relatorio</h2>
+    <div class="card">
+      <p class="small">Preencha com os resultados observados na sua execucao final.</p>
+      <table style="width:100%; border-collapse:collapse; font-size:13px; margin-top:10px;">
+        <thead>
+          <tr>
+            <th style="text-align:left; border-bottom:1px solid #d6d0c4; padding:8px;">Ataque / cenario</th>
+            <th style="text-align:left; border-bottom:1px solid #d6d0c4; padding:8px;">Shift Left detectou?</th>
+            <th style="text-align:left; border-bottom:1px solid #d6d0c4; padding:8px;">WAF bloqueou?</th>
+            <th style="text-align:left; border-bottom:1px solid #d6d0c4; padding:8px;">Falco alertou?</th>
+            <th style="text-align:left; border-bottom:1px solid #d6d0c4; padding:8px;">Resultado</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="padding:8px; border-bottom:1px solid #ece7dc;">Imagem vulneravel / achado do Trivy</td>
+            <td style="padding:8px; border-bottom:1px solid #ece7dc;">Sim</td>
+            <td style="padding:8px; border-bottom:1px solid #ece7dc;">N/A</td>
+            <td style="padding:8px; border-bottom:1px solid #ece7dc;">N/A</td>
+            <td style="padding:8px; border-bottom:1px solid #ece7dc;">Bloqueado na pipeline</td>
+          </tr>
+          <tr>
+            <td style="padding:8px; border-bottom:1px solid #ece7dc;">SQL Injection em endpoint HTTP</td>
+            <td style="padding:8px; border-bottom:1px solid #ece7dc;">Nao necessariamente</td>
+            <td style="padding:8px; border-bottom:1px solid #ece7dc;">Sim</td>
+            <td style="padding:8px; border-bottom:1px solid #ece7dc;">Nao aplicavel</td>
+            <td style="padding:8px; border-bottom:1px solid #ece7dc;">Bloqueado na borda</td>
+          </tr>
+          <tr>
+            <td style="padding:8px;">Exec / leitura sensivel no container</td>
+            <td style="padding:8px;">Nao</td>
+            <td style="padding:8px;">Nao</td>
+            <td style="padding:8px;">Sim</td>
+            <td style="padding:8px;">Detectado em runtime</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="footer">
+      <span>Arquivo: docs/entrega-5-diagrama.html</span>
+      <span>Gerar PDF pelo navegador apos inserir os prints</span>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,439 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Centro de Evidencias DevSecOps</title>
+  <style>
+    :root {
+      --night: #09101d;
+      --night-2: #101c2e;
+      --ink: #eaf1fb;
+      --muted: #9aabc1;
+      --line: rgba(173, 200, 233, .15);
+      --panel: rgba(17, 31, 50, .74);
+      --panel-solid: #122139;
+      --moss: #38c899;
+      --moss-soft: rgba(56, 200, 153, .14);
+      --blue: #6da9ff;
+      --blue-soft: rgba(109, 169, 255, .14);
+      --amber: #ffb357;
+      --amber-soft: rgba(255, 179, 87, .14);
+      --red: #ff7d70;
+      --red-soft: rgba(255, 125, 112, .14);
+      --mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      --sans: "Trebuchet MS", "Avenir Next", Avenir, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body { min-height: 100vh; margin: 0; color: var(--ink); background: var(--night); font-family: var(--sans); }
+    body::before { content: ""; position: fixed; inset: 0; z-index: -2; background: radial-gradient(circle at 17% -6%, #174d74 0, transparent 31%), radial-gradient(circle at 87% 6%, #153c54 0, transparent 26%), linear-gradient(145deg, #07101e, #0c1425 55%, #08111c); }
+    body::after { content: ""; position: fixed; inset: 0; z-index: -1; opacity: .23; background-image: linear-gradient(rgba(159, 201, 255, .12) 1px, transparent 1px), linear-gradient(90deg, rgba(159, 201, 255, .12) 1px, transparent 1px); background-size: 46px 46px; mask-image: linear-gradient(to bottom, black, transparent 82%); }
+    .shell { width: min(1440px, calc(100% - 32px)); margin: 0 auto; padding: 28px 0 56px; }
+    header { display: grid; grid-template-columns: 1.35fr .65fr; gap: 18px; align-items: stretch; margin-bottom: 18px; }
+    .hero, .run-panel { border: 1px solid var(--line); border-radius: 20px; overflow: hidden; box-shadow: 0 22px 70px rgba(0, 0, 0, .23); }
+    .hero { min-height: 280px; padding: 34px; background: linear-gradient(125deg, rgba(20, 53, 76, .95), rgba(9, 20, 36, .93) 63%); color: #fff; position: relative; isolation: isolate; }
+    .hero::before { content: ""; position: absolute; z-index: -1; inset: auto -50px -135px auto; width: 360px; height: 360px; border-radius: 50%; background: conic-gradient(from 90deg, transparent 0 23%, rgba(56, 200, 153, .65) 23% 38%, transparent 38% 54%, rgba(109, 169, 255, .7) 54% 68%, transparent 68%); filter: blur(.2px); }
+    .hero::after { content: ""; position: absolute; width: 118px; height: 118px; border: 1px solid rgba(191, 229, 255, .32); border-radius: 50%; right: 65px; top: 58px; box-shadow: 0 0 0 18px rgba(106, 177, 255, .06), 0 0 0 37px rgba(106, 177, 255, .035); }
+    .eyebrow, .section-label { text-transform: uppercase; letter-spacing: .12em; font-size: .71rem; font-weight: 800; }
+    .eyebrow { color: #93e8ca; }
+    h1 { max-width: 740px; margin: 12px 0; font-size: clamp(2.1rem, 4vw, 4rem); line-height: .96; letter-spacing: -.065em; }
+    .hero p { max-width: 650px; margin: 0; color: #bed2e5; font-size: 1.02rem; line-height: 1.55; }
+    .hero-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 25px; }
+    .hero-meta span { padding: 6px 9px; border: 1px solid rgba(190, 218, 241, .2); background: rgba(0, 0, 0, .15); border-radius: 100px; color: #dbeaff; font-family: var(--mono); font-size: .68rem; }
+    .hero-meta i { display: inline-block; width: 6px; height: 6px; margin-right: 5px; border-radius: 50%; background: var(--moss); box-shadow: 0 0 10px var(--moss); }
+    .run-panel { padding: 24px; background: linear-gradient(160deg, rgba(22, 40, 63, .92), rgba(12, 24, 41, .94)); }
+    .run-panel h2, .panel-title { margin: 7px 0 16px; font-size: 1.2rem; letter-spacing: -.02em; }
+    .button-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    button, input { font: inherit; }
+    button { border: 1px solid var(--line); padding: 11px 8px; cursor: pointer; background: rgba(255, 255, 255, .035); color: #d8e6f3; border-radius: 10px; font-size: .83rem; font-weight: 800; transition: border-color .18s ease, background .18s ease, transform .18s ease; }
+    button:hover { transform: translateY(-1px); border-color: rgba(109, 169, 255, .66); background: rgba(109, 169, 255, .09); }
+    button.selected { border-color: var(--moss); background: var(--moss-soft); color: #cffff0; box-shadow: inset 0 0 0 1px rgba(56, 200, 153, .15); }
+    button:disabled { cursor: wait; opacity: .55; }
+    .run-actions { display: flex; align-items: end; gap: 10px; margin-top: 14px; }
+    .profile-picker { margin-top: 19px; padding-top: 16px; border-top: 1px solid var(--line); }
+    .profile-picker > span { display: block; margin-bottom: 8px; color: var(--muted); font-size: .68rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+    .profile-row { display: grid; grid-template-columns: 1fr 1fr auto; gap: 7px; }
+    .profile.selected { border-color: var(--amber); color: #ffe0ac; background: var(--amber-soft); }
+    #apply-profile { padding-inline: 12px; border-color: rgba(109, 169, 255, .55); color: #dbeaff; }
+    label { display: grid; gap: 5px; color: var(--muted); font-size: .77rem; font-weight: 700; }
+    input { width: 78px; padding: 10px; color: var(--ink); background: rgba(255, 255, 255, .045); border: 1px solid var(--line); border-radius: 9px; }
+    #run-button { flex: 1; color: #062016; background: linear-gradient(135deg, #54e3ad, #2cc594); border-color: #58e8b4; box-shadow: 0 8px 20px rgba(56, 200, 153, .18); }
+    #run-button:hover { background: linear-gradient(135deg, #72edc0, #38c899); }
+    .status { min-height: 18px; margin: 13px 0 0; color: var(--muted); font-size: .81rem; }
+    .status.error { color: var(--red); }
+    .status.ok { color: var(--moss); }
+    .architecture { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 18px 0; }
+    .layer { padding: 19px; background: linear-gradient(135deg, rgba(23, 42, 65, .9), rgba(14, 27, 45, .85)); border: 1px solid var(--line); border-radius: 16px; position: relative; min-height: 130px; overflow: hidden; }
+    .layer::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: var(--blue); }
+    .layer:nth-child(2)::before { background: var(--amber); }
+    .layer:nth-child(3)::before { background: var(--moss); }
+    .layer:not(:last-child)::after { content: ">"; position: absolute; right: -14px; top: calc(50% - 14px); width: 28px; height: 28px; display: grid; place-items: center; border: 1px solid var(--line); border-radius: 50%; background: var(--night-2); color: var(--muted); z-index: 1; font-family: var(--mono); }
+    .layer .number { font-family: var(--mono); color: var(--muted); font-size: .75rem; }
+    .layer h3 { margin: 8px 0 6px; font-size: 1.07rem; }
+    .layer p { margin: 0; color: var(--muted); line-height: 1.35; font-size: .86rem; }
+    .tag { display: inline-block; padding: 4px 8px; border-radius: 100px; font-size: .7rem; font-weight: 800; }
+    .tag.history { background: var(--blue-soft); color: var(--blue); }
+    .tag.block { background: var(--amber-soft); color: var(--amber); }
+    .tag.detect { background: var(--moss-soft); color: var(--moss); }
+    .kpi-strip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 18px 0; }
+    .kpi { min-height: 110px; padding: 16px 18px; border: 1px solid var(--line); border-radius: 15px; background: rgba(16, 30, 49, .82); position: relative; overflow: hidden; }
+    .kpi::after { content: ""; width: 72px; height: 72px; position: absolute; right: -25px; bottom: -33px; border: 1px solid rgba(109, 169, 255, .35); border-radius: 50%; }
+    .kpi:nth-child(2)::after { border-color: rgba(255, 179, 87, .45); }.kpi:nth-child(3)::after { border-color: rgba(56, 200, 153, .45); }
+    .kpi-label { color: var(--muted); font-size: .68rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+    .kpi-value { margin: 10px 0 4px; color: #fff; font-family: var(--mono); font-size: 1.45rem; font-weight: 800; letter-spacing: -.06em; }
+    .kpi-detail { color: #aec0d3; font-size: .75rem; }
+    .cluster-strip { display: grid; grid-template-columns: 1.25fr repeat(3, 1fr); gap: 12px; margin: 18px 0; }
+    .cluster-summary, .resource-state { padding: 15px 17px; border: 1px solid var(--line); border-radius: 14px; background: rgba(11, 25, 43, .76); }
+    .cluster-summary { background: linear-gradient(115deg, rgba(17, 50, 69, .94), rgba(13, 31, 50, .82)); }
+    .cluster-summary strong { display: block; margin-top: 5px; font-size: 1.05rem; }.cluster-summary small, .resource-state small { color: var(--muted); font-size: .72rem; }
+    .resource-name { color: var(--muted); font-size: .68rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+    .resource-value { display: flex; align-items: center; gap: 7px; margin: 8px 0 2px; color: #f6fbff; font-family: var(--mono); font-size: .85rem; font-weight: 800; }
+    .resource-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--muted); }.resource-dot.ready { background: var(--moss); box-shadow: 0 0 10px var(--moss); }.resource-dot.failed { background: var(--red); box-shadow: 0 0 10px var(--red); }
+    .test-lab { margin: 18px 0; padding: 22px; border: 1px solid rgba(109, 169, 255, .23); border-radius: 19px; background: linear-gradient(110deg, rgba(15, 34, 56, .97), rgba(13, 28, 47, .84)); box-shadow: 0 18px 45px rgba(0, 0, 0, .16); }
+    .test-lab-header { display: flex; align-items: end; justify-content: space-between; gap: 20px; margin-bottom: 17px; }
+    .test-lab h2 { margin: 5px 0 0; font-size: clamp(1.28rem, 2vw, 1.65rem); letter-spacing: -.035em; }
+    .test-lab p { max-width: 510px; margin: 0; color: var(--muted); font-size: .84rem; line-height: 1.45; }
+    .test-deck { display: grid; grid-template-columns: repeat(3, 1fr); gap: 11px; }
+    .test-card { min-width: 0; min-height: 142px; padding: 16px; border: 1px solid var(--line); border-radius: 14px; background: rgba(6, 16, 29, .35); position: relative; overflow: hidden; }
+    .test-card::after { content: ""; position: absolute; inset: auto -13px -25px auto; width: 72px; height: 72px; border: 1px solid rgba(109, 169, 255, .25); border-radius: 50%; }
+    .test-card.attack::before, .test-card.runtime::before, .test-card.benign::before { content: ""; display: block; width: 7px; height: 7px; border-radius: 50%; position: absolute; top: 18px; right: 18px; }
+    .test-card.attack::before { background: var(--amber); box-shadow: 0 0 14px var(--amber); }
+    .test-card.runtime::before { background: var(--moss); box-shadow: 0 0 14px var(--moss); }
+    .test-card.benign::before { background: var(--blue); box-shadow: 0 0 14px var(--blue); }
+    .test-kind { color: var(--muted); font-family: var(--mono); font-size: .66rem; letter-spacing: .08em; text-transform: uppercase; }
+    .test-card h3 { max-width: calc(100% - 24px); margin: 9px 0 15px; font-size: 1rem; letter-spacing: -.02em; }
+    .verdict { display: inline-flex; align-items: center; gap: 6px; padding: 5px 8px; border-radius: 6px; font-family: var(--mono); font-size: .7rem; font-weight: 800; }
+    .verdict.blocked { color: var(--amber); background: var(--amber-soft); }.verdict.detected { color: var(--moss); background: var(--moss-soft); }.verdict.allowed { color: var(--blue); background: var(--blue-soft); }.verdict.forwarded { color: var(--red); background: var(--red-soft); }.verdict.pending { color: var(--muted); background: rgba(154, 171, 193, .1); }
+    .test-proof { margin-top: 11px; color: #aabdd0; font-family: var(--mono); font-size: .69rem; }
+    .impact-zone { margin: 18px 0; padding: 22px; border: 1px solid rgba(255, 125, 112, .22); border-radius: 19px; background: linear-gradient(110deg, rgba(48, 23, 39, .66), rgba(14, 28, 47, .9) 45%); }
+    .impact-zone .section-label { color: #ffb0a8; }.impact-zone h2 { margin: 5px 0 7px; font-size: 1.4rem; letter-spacing: -.035em; }.impact-zone > p { max-width: 780px; margin: 0 0 16px; color: var(--muted); line-height: 1.45; font-size: .87rem; }
+    .impact-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .impact-card { min-height: 155px; padding: 18px; border: 1px solid var(--line); border-radius: 14px; background: rgba(5, 14, 27, .42); position: relative; overflow: hidden; }
+    .impact-card.exposed { border-color: rgba(255, 125, 112, .48); }.impact-card.protected { border-color: rgba(255, 179, 87, .45); }
+    .impact-card h3 { margin: 6px 0 13px; font-size: 1.02rem; }.impact-eyebrow { color: var(--muted); font-family: var(--mono); font-size: .67rem; letter-spacing: .08em; text-transform: uppercase; }
+    .impact-verdict { display: inline-block; margin-bottom: 11px; padding: 6px 8px; border-radius: 7px; font-family: var(--mono); font-size: .72rem; font-weight: 800; }.impact-verdict.exposed { background: var(--red-soft); color: var(--red); }.impact-verdict.protected { background: var(--amber-soft); color: var(--amber); }.impact-verdict.pending { background: rgba(154, 171, 193, .1); color: var(--muted); }
+    .impact-proof { color: #aabdd0; font-family: var(--mono); font-size: .71rem; line-height: 1.5; }
+    .grid { display: grid; grid-template-columns: 1.1fr 1.1fr .8fr; gap: 16px; }
+    .card { min-width: 0; padding: 22px; border: 1px solid var(--line); border-radius: 18px; background: linear-gradient(145deg, rgba(20, 37, 59, .9), rgba(13, 25, 42, .84)); box-shadow: 0 15px 35px rgba(0, 0, 0, .13); }
+    .wide { grid-column: span 2; }
+    .card p { color: var(--muted); line-height: 1.48; font-size: .91rem; }
+    .metric { display: grid; grid-template-columns: 1fr auto; gap: 3px 10px; align-items: baseline; padding: 13px 0; border-top: 1px solid var(--line); }
+    .metric:first-of-type { border-top: 0; }
+    .metric strong { font-size: 1rem; }
+    .metric small { color: var(--muted); font-size: .76rem; }
+    .metric .value { color: var(--moss); font-family: var(--mono); font-size: .86rem; font-weight: 800; text-align: right; }
+    .metric .value.warning { color: var(--amber); }
+    .metric .value.neutral { color: var(--blue); }
+    .empty { color: var(--muted); font-size: .88rem; font-style: italic; }
+    .event { padding: 12px 0; border-top: 1px solid var(--line); }
+    .event:first-child { border-top: 0; }
+    .event-head { display: flex; justify-content: space-between; gap: 8px; font-size: .83rem; font-weight: 800; }
+    .event time, .event .detail { color: var(--muted); font-family: var(--mono); font-size: .72rem; line-height: 1.45; overflow-wrap: anywhere; }
+    .event .detail { margin-top: 5px; }
+    .terminal { min-height: 122px; max-height: 240px; margin: 18px 0 0; padding: 16px; overflow: auto; border: 1px solid rgba(56, 200, 153, .26); border-radius: 14px; background: #08150f; color: #bce8d2; font-family: var(--mono); font-size: .76rem; line-height: 1.52; white-space: pre-wrap; }
+    .terminal[hidden] { display: none; }
+    .note { grid-column: 1 / -1; padding: 18px 20px; border: 1px solid rgba(255, 179, 87, .24); border-left: 5px solid var(--amber); background: rgba(255, 179, 87, .08); color: #e8d4b8; border-radius: 0 12px 12px 0; line-height: 1.45; }
+    .note strong { color: var(--ink); }
+    footer { margin-top: 28px; color: var(--muted); font-family: var(--mono); font-size: .72rem; }
+    @media (max-width: 900px) { header, .grid { grid-template-columns: 1fr; } .kpi-strip, .test-deck, .cluster-strip, .impact-grid { grid-template-columns: repeat(2, 1fr); } .cluster-summary { grid-column: span 2; } .wide { grid-column: auto; } }
+    @media (max-width: 680px) { .shell { width: min(100% - 20px, 1440px); padding-top: 10px; } .hero, .run-panel, .card, .test-lab, .impact-zone { border-radius: 14px; } .hero { min-height: 250px; padding: 25px; } .hero::after { right: 32px; top: 48px; opacity: .45; } .architecture, .kpi-strip, .test-deck, .cluster-strip, .impact-grid { grid-template-columns: 1fr; } .cluster-summary { grid-column: auto; } .test-lab-header { display: block; }.test-lab-header p { margin-top: 10px; } .layer:not(:last-child)::after { top: auto; bottom: -14px; left: calc(50% - 14px); right: auto; } .button-row { grid-template-columns: 1fr; } .profile-row { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header>
+      <section class="hero">
+        <div class="eyebrow">TCC DevSecOps Lab / Painel local</div>
+        <h1>Centro de Evidencias da PoC</h1>
+        <p>Uma leitura unica do que a defesa em profundidade evitou antes do deploy, bloqueou na borda e detectou durante a execucao.</p>
+        <div class="hero-meta"><span><i></i>cluster local</span><span><i></i>cenarios controlados</span><span><i></i>evidencia rastreavel</span></div>
+      </section>
+      <section class="run-panel" aria-labelledby="runner-title">
+        <div class="section-label">Demonstracao controlada</div>
+        <h2 id="runner-title">Disparar um cenario</h2>
+        <div class="button-row" role="group" aria-label="Camada a executar">
+          <button class="scenario selected" data-scenario="all">Fluxo completo</button>
+          <button class="scenario" data-scenario="waf">WAF</button>
+          <button class="scenario" data-scenario="falco">Runtime</button>
+        </div>
+        <div class="run-actions">
+          <label>Repeticoes <input id="repetitions" type="number" min="1" max="10" value="1"></label>
+          <button id="run-button">Executar cenario</button>
+        </div>
+        <div class="profile-picker">
+          <span>Perfil WAF do experimento</span>
+          <div class="profile-row" role="group" aria-label="Perfil de protecao HTTP">
+            <button class="profile" data-profile="baseline">Baseline</button>
+            <button class="profile selected" data-profile="defendido">Defendido</button>
+            <button id="apply-profile">Aplicar</button>
+          </div>
+        </div>
+        <p class="status" id="status" aria-live="polite">Pronto. Para uma apresentacao, use uma repeticao.</p>
+      </section>
+    </header>
+
+    <section class="cluster-strip" aria-label="Estado real do cluster">
+      <article class="cluster-summary"><div class="section-label">Estado do experimento</div><strong id="cluster-profile">Consultando cluster...</strong><small id="cluster-checked">A configuracao do Ingress sera lida diretamente do Kubernetes.</small></article>
+      <article class="resource-state"><div class="resource-name">Juice Shop</div><div class="resource-value"><i class="resource-dot" id="juice-dot"></i><span id="juice-status">-</span></div><small id="juice-detail">pod da aplicacao alvo</small></article>
+      <article class="resource-state"><div class="resource-name">NGINX Ingress</div><div class="resource-value"><i class="resource-dot" id="ingress-dot"></i><span id="ingress-status">-</span></div><small id="ingress-detail">borda HTTP</small></article>
+      <article class="resource-state"><div class="resource-name">Falco</div><div class="resource-value"><i class="resource-dot" id="falco-dot"></i><span id="falco-status">-</span></div><small id="falco-detail">observacao em runtime</small></article>
+    </section>
+
+    <section class="kpi-strip" aria-label="Resumo das camadas">
+      <article class="kpi"><div class="kpi-label">Shift Left</div><div class="kpi-value">Gate</div><div class="kpi-detail" id="kpi-pipeline">Evidencia historica do pipeline</div></article>
+      <article class="kpi"><div class="kpi-label">WAF</div><div class="kpi-value" id="kpi-waf">-</div><div class="kpi-detail">requisicoes bloqueadas nesta coleta</div></article>
+      <article class="kpi"><div class="kpi-label">Runtime</div><div class="kpi-value" id="kpi-falco">-</div><div class="kpi-detail">alertas Falco correlacionados</div></article>
+      <article class="kpi"><div class="kpi-label">Ultima coleta</div><div class="kpi-value" id="kpi-time">--:--</div><div class="kpi-detail">dados atualizados no painel</div></article>
+    </section>
+
+    <section class="test-lab" aria-labelledby="tests-title">
+      <div class="test-lab-header">
+        <div><div class="section-label">Prova da PoC</div><h2 id="tests-title">Testes e vereditos da defesa</h2></div>
+        <p>O painel destaca o resultado esperado de cada cenário. A taxa e a latência abaixo são calculadas com os dados da última execução controlada.</p>
+      </div>
+      <div class="test-deck" id="test-deck"></div>
+    </section>
+
+    <section class="impact-zone" aria-labelledby="impact-title">
+      <div class="section-label">Impacto na aplicacao alvo</div>
+      <h2 id="impact-title">O ataque chegou ao Juice Shop?</h2>
+      <p>Esta leitura correlaciona a resposta HTTP com o upstream do Ingress. Ela prova encaminhamento ou bloqueio antes da aplicacao, mas nao afirma extracao de dados ou execucao de codigo alem do que o experimento registrou.</p>
+      <div class="impact-grid" id="impact-grid"></div>
+    </section>
+
+    <section class="architecture" aria-label="Camadas de defesa">
+      <article class="layer"><span class="number">01 / ANTES</span><h3>Shift Left</h3><span class="tag history">evidencia historica</span><p>GitHub Actions, SonarCloud e Trivy verificam o artefato antes da promocao.</p></article>
+      <article class="layer"><span class="number">02 / BORDA</span><h3>WAF</h3><span class="tag block">bloqueia</span><p>NGINX Ingress, ModSecurity e OWASP CRS retornam 403 para payloads maliciosos.</p></article>
+      <article class="layer"><span class="number">03 / RUNTIME</span><h3>Falco</h3><span class="tag detect">detecta</span><p>Regras customizadas observam execucao e leitura sensivel no pod do Juice Shop.</p></article>
+    </section>
+
+    <section class="grid">
+      <article class="card">
+        <div class="section-label">Pipeline CI/CD</div>
+        <h2 class="panel-title" id="pipeline-title">Carregando evidencia...</h2>
+        <span class="tag history" id="pipeline-label">historico</span>
+        <p id="pipeline-detail"></p>
+        <p><code id="pipeline-source"></code></p>
+      </article>
+      <article class="card">
+        <div class="section-label">WAF / resposta HTTP</div>
+        <h2 class="panel-title">Bloqueio na borda</h2>
+        <div id="waf-metrics"></div>
+      </article>
+      <article class="card">
+        <div class="section-label">Resumo ao vivo</div>
+        <h2 class="panel-title">Sinais da execucao</h2>
+        <div class="metric"><strong>WAF bloqueios</strong><span class="value warning" id="waf-blocked">-</span></div>
+        <div class="metric"><strong>WAF benignos</strong><span class="value" id="waf-benign">-</span></div>
+        <div class="metric"><strong>Falco alertas</strong><span class="value" id="falco-alert-count">-</span></div>
+        <div class="metric"><strong>Falcosidekick</strong><span class="value neutral" id="sidekick-delivery">-</span></div>
+      </article>
+      <article class="card wide">
+        <div class="section-label">Falco / comportamento no pod</div>
+        <h2 class="panel-title">Deteccao em runtime</h2>
+        <div id="falco-metrics"></div>
+      </article>
+      <article class="card">
+        <div class="section-label">Ultima coleta</div>
+        <h2 class="panel-title" id="last-run">Sem execucao local</h2>
+        <p id="run-directory">Use os botoes acima para produzir uma coleta nova no cluster.</p>
+      </article>
+      <article class="card wide">
+        <div class="section-label">Eventos recentes</div>
+        <h2 class="panel-title">Alertas correlacionados do Falco</h2>
+        <div id="falco-events"></div>
+      </article>
+      <article class="card">
+        <div class="section-label">Registros do ingress</div>
+        <h2 class="panel-title">WAF em detalhes</h2>
+        <div id="waf-logs"></div>
+      </article>
+      <aside class="note"><strong>Como interpretar:</strong> o pipeline impede a promocao do artefato; o WAF bloqueia requisicoes HTTP; o Falco detecta comportamento apos o processo iniciar. Deteccao nao significa bloqueio automatico.</aside>
+    </section>
+    <pre class="terminal" id="console" hidden aria-live="polite"></pre>
+    <footer>Escopo seguro: servidor vinculado exclusivamente a 127.0.0.1; os botoes executam apenas cenarios predefinidos do laboratorio.</footer>
+  </main>
+  <script>
+    const byId = (id) => document.getElementById(id);
+    const scenarioButtons = [...document.querySelectorAll('.scenario')];
+    const profileButtons = [...document.querySelectorAll('.profile')];
+    let selectedScenario = 'all';
+    let selectedProfile = 'defendido';
+
+    function formatNumber(value, suffix = '') { return value == null ? '-' : `${Number(value).toFixed(Number.isInteger(value) ? 0 : 1)}${suffix}`; }
+    function empty(message) { const node = document.createElement('p'); node.className = 'empty'; node.textContent = message; return node; }
+    function renderMetrics(target, scenarios, type) {
+      target.replaceChildren();
+      if (!scenarios.length || !scenarios.some((scenario) => scenario.attempts)) {
+        target.append(empty('Ainda nao ha dados desta camada nesta coleta.'));
+        return;
+      }
+      scenarios.forEach((scenario) => {
+        const item = document.createElement('div'); item.className = 'metric';
+        const name = document.createElement('div');
+        const strong = document.createElement('strong'); strong.textContent = scenario.label;
+        const small = document.createElement('small');
+        small.textContent = type === 'waf' ? `${scenario.expected}/${scenario.attempts} com resposta esperada` : `${scenario.detected}/${scenario.attempts} alertas correlacionados`;
+        name.append(strong, small);
+        const value = document.createElement('span'); value.className = `value ${type === 'waf' && scenario.action === 'blocked' ? 'warning' : ''}`;
+        const rate = type === 'waf' ? scenario.successRate : scenario.coverage;
+        value.textContent = `${formatNumber(rate, '%')} / ${formatNumber(scenario.medianMs, ' ms')}`;
+        item.append(name, value); target.append(item);
+      });
+    }
+    function testCard(kind, title, verdict, verdictClass, proof) {
+      const card = document.createElement('article'); card.className = `test-card ${kind}`;
+      const label = document.createElement('div'); label.className = 'test-kind'; label.textContent = kind === 'runtime' ? 'Teste de runtime' : kind === 'benign' ? 'Teste de controle' : 'Teste de ataque';
+      const heading = document.createElement('h3'); heading.textContent = title;
+      const result = document.createElement('span'); result.className = `verdict ${verdictClass}`; result.textContent = verdict;
+      const evidence = document.createElement('div'); evidence.className = 'test-proof'; evidence.textContent = proof;
+      card.append(label, heading, result, evidence); return card;
+    }
+    function renderTests(data) {
+      const target = byId('test-deck'); target.replaceChildren();
+      const wafTests = data.waf.scenarios.map((scenario) => {
+        const hasRun = scenario.attempts > 0;
+        const passed = hasRun && scenario.expected === scenario.attempts;
+        const blocked = scenario.action === 'blocked';
+        const forwarded = scenario.action === 'forwarded';
+        const kind = blocked || forwarded ? 'attack' : 'benign';
+        const observed = scenario.observedCodes?.length ? `HTTP ${scenario.observedCodes.join('/')}` : 'HTTP observado';
+        const verdict = !hasRun ? 'AGUARDANDO COLETA' : passed ? (blocked ? 'BLOQUEADO / 403' : forwarded ? `CHEGOU AO BACKEND / ${observed}` : 'PERMITIDO / 200') : 'RESULTADO INESPERADO';
+        const verdictClass = !hasRun ? 'pending' : passed ? (blocked ? 'blocked' : forwarded ? 'forwarded' : 'allowed') : 'pending';
+        const proof = hasRun ? `${scenario.expected}/${scenario.attempts} esperado | mediana ${formatNumber(scenario.medianMs, ' ms')}` : 'Execute WAF ou Fluxo completo';
+        return testCard(kind, scenario.label, verdict, verdictClass, proof);
+      });
+      const falcoTests = data.falco.scenarios.map((scenario) => {
+        const hasRun = scenario.attempts > 0;
+        const passed = hasRun && scenario.detected === scenario.attempts;
+        const verdict = !hasRun ? 'AGUARDANDO COLETA' : passed ? 'ALERTA DETECTADO' : 'ALERTA NAO CORRELACIONADO';
+        const verdictClass = !hasRun || !passed ? 'pending' : 'detected';
+        const proof = hasRun ? `${scenario.detected}/${scenario.attempts} correlacionado | mediana ${formatNumber(scenario.medianMs, ' ms')}` : 'Execute Runtime ou Fluxo completo';
+        return testCard('runtime', scenario.label, verdict, verdictClass, proof);
+      });
+      [...wafTests, ...falcoTests].forEach((card) => target.append(card));
+    }
+    function renderImpact(impacts) {
+      const target = byId('impact-grid'); target.replaceChildren();
+      if (!impacts.length || !impacts.some((impact) => impact.attempts)) {
+        target.append(empty('Execute WAF ou Fluxo completo para correlacionar o Ingress com a aplicacao alvo.'));
+        return;
+      }
+      impacts.forEach((impact) => {
+        const card = document.createElement('article');
+        const hasProof = impact.reachedBackend || impact.blockedByWaf > 0;
+        const exposed = impact.reachedBackend;
+        card.className = `impact-card ${exposed ? 'exposed' : 'protected'}`;
+        const eyebrow = document.createElement('div'); eyebrow.className = 'impact-eyebrow'; eyebrow.textContent = 'Evidencia de roteamento';
+        const title = document.createElement('h3'); title.textContent = impact.label;
+        const verdict = document.createElement('span'); verdict.className = `impact-verdict ${!hasProof ? 'pending' : exposed ? 'exposed' : 'protected'}`;
+        verdict.textContent = !hasProof ? 'SEM EVIDENCIA SUFICIENTE' : exposed ? 'CHEGOU AO JUICE SHOP' : 'BLOQUEADO ANTES DO JUICE SHOP';
+        const details = document.createElement('div'); details.className = 'impact-proof';
+        const codes = impact.observedCodes?.length ? `Resposta: HTTP ${impact.observedCodes.join('/')}` : 'Resposta: sem dado';
+        const bytes = impact.medianResponseBytes == null ? '' : ` | corpo: ${formatNumber(impact.medianResponseBytes, ' bytes')}`;
+        const upstream = exposed ? ' | upstream: devsecops-lab-juice-shop-3000' : impact.blockedByWaf ? ' | WAF: HTTP 403' : '';
+        details.textContent = `${codes}${bytes}${upstream}`;
+        card.append(eyebrow, title, verdict, details); target.append(card);
+      });
+    }
+    function renderEvents(events) {
+      const target = byId('falco-events'); target.replaceChildren();
+      if (!events.length) return target.append(empty('Execute Runtime ou Fluxo completo para listar eventos correlacionados.'));
+      events.forEach((event) => {
+        const item = document.createElement('div'); item.className = 'event';
+        const head = document.createElement('div'); head.className = 'event-head';
+        const rule = document.createElement('span'); rule.textContent = event.rule;
+        const time = document.createElement('time'); time.textContent = event.time ? new Date(event.time).toLocaleTimeString('pt-BR') : '-';
+        const detail = document.createElement('div'); detail.className = 'detail'; detail.textContent = `${event.pod || '-'} | ${event.file || event.command || '-'}`;
+        head.append(rule, time); item.append(head, detail); target.append(item);
+      });
+    }
+    function renderLogs(logs) {
+      const target = byId('waf-logs'); target.replaceChildren();
+      if (!logs.length) return target.append(empty('Execute WAF ou Fluxo completo para listar registros do ingress.'));
+      logs.slice(-4).reverse().forEach((line) => { const entry = document.createElement('div'); entry.className = 'event detail'; entry.textContent = line; target.append(entry); });
+    }
+    function render(data) {
+      byId('pipeline-title').textContent = data.pipeline.title;
+      byId('pipeline-label').textContent = data.pipeline.label;
+      byId('pipeline-detail').textContent = data.pipeline.detail;
+      byId('pipeline-source').textContent = data.pipeline.source;
+      renderMetrics(byId('waf-metrics'), data.waf.scenarios, 'waf');
+      renderMetrics(byId('falco-metrics'), data.falco.scenarios, 'falco');
+      renderTests(data);
+      renderImpact(data.waf.impact || []);
+      byId('waf-blocked').textContent = data.waf.available ? data.waf.blocked : '-';
+      byId('waf-benign').textContent = data.waf.available ? data.waf.benignAccepted : '-';
+      byId('falco-alert-count').textContent = data.falco.available ? data.falco.events.length : '-';
+      byId('sidekick-delivery').textContent = data.falco.available ? `${data.falco.sidekick.delivered} OK${data.falco.sidekick.errors ? ` / ${data.falco.sidekick.errors} erro(s)` : ''}` : '-';
+      byId('kpi-pipeline').textContent = data.pipeline.label;
+      byId('kpi-waf').textContent = data.waf.available ? data.waf.blocked : '-';
+      byId('kpi-falco').textContent = data.falco.available ? data.falco.events.length : '-';
+      byId('kpi-time').textContent = data.generatedAt ? new Date(data.generatedAt).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) : '--:--';
+      byId('last-run').textContent = data.generatedAt ? new Date(data.generatedAt).toLocaleString('pt-BR') : 'Sem execucao local';
+      byId('run-directory').textContent = data.runDirectory || 'Use os botoes acima para produzir uma coleta nova no cluster.';
+      renderEvents(data.falco.events); renderLogs(data.waf.logs);
+    }
+    function updateResource(prefix, resource) {
+      const ready = resource && resource.state === 'Running' && resource.ready !== '0/0';
+      byId(`${prefix}-dot`).className = `resource-dot ${ready ? 'ready' : 'failed'}`;
+      byId(`${prefix}-status`).textContent = resource ? `${resource.state} ${resource.ready}` : 'Indisponivel';
+      byId(`${prefix}-detail`).textContent = resource?.name ? `${resource.name} | ${resource.restarts} reinicio(s)` : 'nao foi possivel consultar';
+    }
+    function renderCluster(status) {
+      if (!status.available) {
+        byId('cluster-profile').textContent = 'Cluster indisponivel';
+        byId('cluster-checked').textContent = status.error || 'Verifique Minikube e kubectl.';
+        ['juice', 'ingress', 'falco'].forEach((prefix) => updateResource(prefix, null));
+        return;
+      }
+      const defended = status.profile === 'defendido';
+      byId('cluster-profile').textContent = defended ? 'Perfil defendido em enforcement' : 'Baseline: WAF sem enforcement';
+      byId('cluster-checked').textContent = `Ingress lido do cluster as ${new Date(status.checkedAt).toLocaleTimeString('pt-BR')}.`;
+      updateResource('juice', status.juiceShop); updateResource('ingress', status.ingress); updateResource('falco', status.falco);
+      selectedProfile = status.profile;
+      profileButtons.forEach((button) => button.classList.toggle('selected', button.dataset.profile === selectedProfile));
+    }
+    async function loadClusterStatus() {
+      try { const response = await fetch('/api/status'); if (!response.ok) throw new Error(); renderCluster(await response.json()); }
+      catch { renderCluster({ available: false, error: 'Nao foi possivel obter status do Kubernetes.' }); }
+    }
+    async function loadData() {
+      try { const response = await fetch('/api/data'); if (!response.ok) throw new Error(); render(await response.json()); await loadClusterStatus(); }
+      catch { byId('status').textContent = 'Abra este arquivo pelo servidor local: ./scripts/start-dashboard.sh'; byId('status').className = 'status error'; }
+    }
+    scenarioButtons.forEach((button) => button.addEventListener('click', () => {
+      selectedScenario = button.dataset.scenario;
+      scenarioButtons.forEach((item) => item.classList.toggle('selected', item === button));
+    }));
+    profileButtons.forEach((button) => button.addEventListener('click', () => {
+      selectedProfile = button.dataset.profile;
+      profileButtons.forEach((item) => item.classList.toggle('selected', item === button));
+    }));
+    byId('apply-profile').addEventListener('click', async () => {
+      const button = byId('apply-profile'); const status = byId('status'); const consoleNode = byId('console');
+      button.disabled = true; status.textContent = `Aplicando perfil ${selectedProfile} no Ingress...`; status.className = 'status'; consoleNode.hidden = false;
+      try {
+        const response = await fetch('/api/profile', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ profile: selectedProfile }) });
+        const result = await response.json(); consoleNode.textContent = result.output || result.error || 'Sem saida.';
+        if (!response.ok || !result.ok) throw new Error(result.error || `Perfil terminou com codigo ${result.code}`);
+        renderCluster(result.status); status.textContent = `Perfil ${selectedProfile} aplicado. Agora execute o mesmo cenario para comparar.`; status.className = 'status ok';
+      } catch (error) { status.textContent = `Falha ao aplicar perfil: ${error.message}`; status.className = 'status error'; }
+      finally { button.disabled = false; }
+    });
+    byId('run-button').addEventListener('click', async () => {
+      const repetitions = Number(byId('repetitions').value);
+      const button = byId('run-button'); const status = byId('status'); const consoleNode = byId('console');
+      button.disabled = true; status.textContent = `Executando ${selectedScenario} no cluster local...`; status.className = 'status'; consoleNode.hidden = false; consoleNode.textContent = 'Coleta iniciada. Aguarde...';
+      try {
+        const response = await fetch('/api/run', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ scenario: selectedScenario, repetitions }) });
+        const result = await response.json(); consoleNode.textContent = result.output || result.error || 'Sem saida.';
+        if (!response.ok || !result.ok) throw new Error(result.error || `Execucao terminou com codigo ${result.code}`);
+        render(result.data); await loadClusterStatus(); status.textContent = 'Coleta concluida e painel atualizado.'; status.className = 'status ok';
+      } catch (error) { status.textContent = `Falha na coleta: ${error.message}`; status.className = 'status error'; }
+      finally { button.disabled = false; }
+    });
+    loadData();
+  </script>
+</body>
+</html>

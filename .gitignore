@@ -16,5 +16,12 @@ secrets/*.yml
 .kube/
 
 # Local artifacts
-docs/evidencias/
+docs/evidencias/*
+!docs/evidencias/.gitkeep
+!docs/evidencias/*.csv
+!docs/evidencias/*.log
+!docs/evidencias/*.md
+docs/demo-output/*
+!docs/demo-output/.gitkeep
+!docs/demo-output/README.md
 .cache/

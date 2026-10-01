@@ -51,3 +51,6 @@ Detecta leitura de arquivos sensiveis como `/etc/passwd` e do banco SQLite local
 - print dos logs do Falco
 - print da interface do Falcosidekick
 - terminal com os comandos de disparo
+
+![alt text](image-4.png)
+![alt text](image-5.png)

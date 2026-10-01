@@ -1,7 +1,10 @@
 controller:
-  allowSnippetAnnotations: true
+  service:
+    # Minikube exposes this service through the node address without requiring minikube tunnel.
+    type: NodePort
+  allowSnippetAnnotations: false
   config:
-    allow-snippet-annotations: "true"
+    allow-snippet-annotations: "false"
     enable-modsecurity: "true"
     enable-owasp-modsecurity-crs: "true"
     modsecurity-snippet: |

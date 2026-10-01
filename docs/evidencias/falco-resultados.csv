@@ -1,0 +1,21 @@
+cenario,iteracao,marcador,disparo_utc,alerta_utc,regra_observada,latencia_ms,correlacionado,pod,namespace
+C5,1,falco-exec-C5-01,2026-08-23T22:03:59.518764786Z,2026-08-23T22:03:59.720862796Z,Exec into Juice Shop,202.098,sim,juice-shop-86d6899c64-krcrk,devsecops-lab
+C5,2,falco-exec-C5-02,2026-08-23T22:04:00.133197471Z,2026-08-23T22:04:00.323416380Z,Exec into Juice Shop,190.219,sim,juice-shop-86d6899c64-krcrk,devsecops-lab
+C5,3,falco-exec-C5-03,2026-08-23T22:04:00.731323791Z,2026-08-23T22:04:00.959154552Z,Exec into Juice Shop,227.831,sim,juice-shop-86d6899c64-krcrk,devsecops-lab
+C5,4,falco-exec-C5-04,2026-08-23T22:04:01.410470516Z,2026-08-23T22:04:01.671274955Z,Exec into Juice Shop,260.804,sim,juice-shop-86d6899c64-krcrk,devsecops-lab
+C5,5,falco-exec-C5-05,2026-08-23T22:04:02.217361433Z,2026-08-23T22:04:02.407166361Z,Exec into Juice Shop,189.805,sim,juice-shop-86d6899c64-krcrk,devsecops-lab
+C5,6,falco-exec-C5-06,2026-08-23T22:04:02.839389460Z,2026-08-23T22:04:03.031705458Z,Exec into Juice Shop,192.316,sim,juice-shop-86d6899c64-krcrk,devsecops-lab
+C5,7,falco-exec-C5-07,2026-08-23T22:04:03.471001012Z,2026-08-23T22:04:03.660678148Z,Exec into Juice Shop,189.677,sim,juice-shop-86d6899c64-krcrk,devsecops-lab
+C5,8,falco-exec-C5-08,2026-08-23T22:04:04.074196413Z,2026-08-23T22:04:04.305615033Z,Exec into Juice Shop,231.419,sim,juice-shop-86d6899c64-krcrk,devsecops-lab
+C5,9,falco-exec-C5-09,2026-08-23T22:04:04.708737725Z,2026-08-23T22:04:04.908627385Z,Exec into Juice Shop,199.890,sim,juice-shop-86d6899c64-krcrk,devsecops-lab
+C5,10,falco-exec-C5-10,2026-08-23T22:04:05.368882984Z,2026-08-23T22:04:05.554827917Z,Exec into Juice Shop,185.945,sim,juice-shop-86d6899c64-krcrk,devsecops-lab
+C6,1,falco-read-C6-01,2026-08-23T22:03:59.832086523Z,2026-08-23T22:04:00.106402161Z,Read sensitive file in Juice Shop,274.316,sim,juice-shop-86d6899c64-krcrk,devsecops-lab
+C6,2,falco-read-C6-02,2026-08-23T22:04:00.411605455Z,2026-08-23T22:04:00.699495490Z,Read sensitive file in Juice Shop,287.890,sim,juice-shop-86d6899c64-krcrk,devsecops-lab
+C6,3,falco-read-C6-03,2026-08-23T22:04:01.081697257Z,2026-08-23T22:04:01.383028688Z,Read sensitive file in Juice Shop,301.331,sim,juice-shop-86d6899c64-krcrk,devsecops-lab
+C6,4,falco-read-C6-04,2026-08-23T22:04:01.821484035Z,2026-08-23T22:04:02.161833809Z,Read sensitive file in Juice Shop,340.350,sim,juice-shop-86d6899c64-krcrk,devsecops-lab
+C6,5,falco-read-C6-05,2026-08-23T22:04:02.540627962Z,2026-08-23T22:04:02.806591045Z,Read sensitive file in Juice Shop,265.963,sim,juice-shop-86d6899c64-krcrk,devsecops-lab
+C6,6,falco-read-C6-06,2026-08-23T22:04:03.166614242Z,2026-08-23T22:04:03.394532115Z,Read sensitive file in Juice Shop,227.918,sim,juice-shop-86d6899c64-krcrk,devsecops-lab
+C6,7,falco-read-C6-07,2026-08-23T22:04:03.764255421Z,2026-08-23T22:04:03.995715158Z,Read sensitive file in Juice Shop,231.460,sim,juice-shop-86d6899c64-krcrk,devsecops-lab
+C6,8,falco-read-C6-08,2026-08-23T22:04:04.413923248Z,2026-08-23T22:04:04.647197931Z,Read sensitive file in Juice Shop,233.275,sim,juice-shop-86d6899c64-krcrk,devsecops-lab
+C6,9,falco-read-C6-09,2026-08-23T22:04:05.023245075Z,2026-08-23T22:04:05.315797172Z,Read sensitive file in Juice Shop,292.552,sim,juice-shop-86d6899c64-krcrk,devsecops-lab
+C6,10,falco-read-C6-10,2026-08-23T22:04:05.683475530Z,2026-08-23T22:04:05.911225085Z,Read sensitive file in Juice Shop,227.750,sim,juice-shop-86d6899c64-krcrk,devsecops-lab
