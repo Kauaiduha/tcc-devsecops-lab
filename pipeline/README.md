@@ -31,7 +31,9 @@ This project also uses:
 
 - `build` creates the image and stores it as an artifact
 - `sast` runs SonarQube scan plus quality gate
-- `sca` runs Trivy on the repository and on the Docker image
+- `sca-filesystem` runs Trivy on the repository filesystem
+- `sca-image` runs Trivy on the built Docker image
+- `sast`, `sca-filesystem`, and `sca-image` run independently after `build`, so a failed gate does not prevent the other scans from running
 - `push` publishes to GHCR only if all prior jobs pass
 - `deploy` is intentionally disabled until cluster credentials are added
 
